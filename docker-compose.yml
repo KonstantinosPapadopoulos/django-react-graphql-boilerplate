@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  
+  server:
+    build: ./server
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - ./server:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - main-network
+  client:
+    build: ./client
+    command: ["npm", "start"]
+    volumes:
+      - ./client:/app
+      - node-modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    networks:
+      - main-network
+    depends_on:
+      - server
+
+volumes:
+  node-modules:
+
+networks:
+  main-network:
+    driver: bridge
